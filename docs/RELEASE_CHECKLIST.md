@@ -1,10 +1,10 @@
 # Release review
 
-This checklist records the scope of the initial website and evaluation-code release. Detailed local test evidence is kept in `REVIEW.md` at repository root.
+This checklist records the scope of the website and evaluation-code release, including the public paper link added on 2026-10-11. Detailed local test evidence is kept in `REVIEW.md` at repository root.
 
 - [x] Compare all 170 score values in Table 2 against the paper, including the human row.
 - [x] Keep website and repository copy free of conference submission and review-status promotion.
-- [x] Keep the unpublished paper PDF, download links, and premature citation out of the public site.
+- [x] Link the approved public paper at https://arxiv.org/abs/2610.05013 from both pages and the repository README; keep the local manuscript PDF out of the deployed assets.
 - [x] Identify privileged annotation ablations and distinguish them from main results.
 - [x] State the public dataset release status accurately; do not invent download links.
 - [x] Run offline evaluation tests and synthetic transport smoke tests without paid APIs.

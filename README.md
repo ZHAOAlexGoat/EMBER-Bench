@@ -6,13 +6,19 @@
 
 **Which past event matters for the next action?**
 
-[Homepage](https://zhaoalexgoat.github.io/EMBER-Bench/) · [Leaderboard](https://zhaoalexgoat.github.io/EMBER-Bench/leaderboard.html) · [Evaluation code](evaluation/README.md)
+[Paper · arXiv](https://arxiv.org/abs/2610.05013) · [Homepage](https://zhaoalexgoat.github.io/EMBER-Bench/) · [Leaderboard](https://zhaoalexgoat.github.io/EMBER-Bench/leaderboard.html) · [Evaluation code](evaluation/README.md)
 
 <img src="assets/memory-timeline.svg" alt="Past events leave persistent consequences that constrain the next action; causal traceback identifies the supporting event." width="100%">
 
 **189 household tasks · 699 questions · 4 memory scenarios · 2 reasoning directions**
 
 </div>
+
+## Paper
+
+[**EMBER-Bench: Benchmarking Cross-Event Causal Memory in Long-Horizon Embodied Tasks**](https://arxiv.org/abs/2610.05013)
+
+Aoyang Cai, Boning Zhao, Shaoxuan Xie, Dahui Gao, Huan Yang, Zhongyuan Wang, Zhiwei Yu, Guocai Yao. Public preprint: **arXiv:2610.05013** (2026).
 
 ## What EMBER-Bench measures
 

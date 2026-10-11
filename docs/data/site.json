@@ -1,5 +1,6 @@
 {
   "repository": "https://github.com/ZHAOAlexGoat/EMBER-Bench",
   "owner": "ZHAOAlexGoat",
+  "paper": "https://arxiv.org/abs/2610.05013",
   "datasetStatus": "pending"
 }

@@ -1,7 +1,7 @@
 {
   "title": "EMBER-Bench video-history leaderboard",
   "source": "Table 2, EMBER-Bench paper",
-  "paper": null,
+  "paper": "https://arxiv.org/abs/2610.05013",
   "setting": "V",
   "metric": "Accuracy (%)",
   "columns": [

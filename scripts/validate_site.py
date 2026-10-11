@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'docs'
 COLUMNS = ['overall', 'p_all', 'p_l1', 'p_l2', 'p_l3', 'p_l4', 'c_all', 'c_l2', 'c_l3', 'c_l4']
 TABLE_SHA = 'f5097449b88c73f2ca1e5f0daaf3b8e700efc83980eb015e0c5f288d88bd2c31'
+PAPER_URL = 'https://arxiv.org/abs/2610.05013'
 
 
 class Page(HTMLParser):
@@ -99,8 +100,11 @@ def main():
     for name, markup in fallback:
         cells = {key: float(value) for key, value in re.findall(r'<td\b[^>]*data-key="([^"]+)"[^>]*>([\d.]+)</td>', markup)}
         assert cells == {key: expected[html.unescape(name)][key] for key in COLUMNS}, 'Static HTML table differs from paper JSON.'
-    assert data.get('paper') is None, 'The unpublished paper must not have a download URL.'
-    assert not (SITE / 'assets/EMBER-Bench.pdf').exists(), 'The unpublished paper must not be deployed.'
+    assert config.get('paper') == data.get('paper') == PAPER_URL, 'Public paper metadata must point to the approved arXiv preprint.'
+    for name in ('index.html', 'leaderboard.html'):
+        assert PAPER_URL in pages[(SITE / name).resolve()].links, f'Missing public paper link in {name}.'
+    assert f']({PAPER_URL})' in (ROOT / 'README.md').read_text(encoding='utf-8'), 'Missing public paper link in the repository README.'
+    assert not (SITE / 'assets/EMBER-Bench.pdf').exists(), 'The local manuscript PDF must not be deployed; use the public arXiv link.'
     provenance = json.loads((SITE / 'assets/figures/originals.json').read_text(encoding='utf-8'))
     originals = provenance['figures']
     expected_figures = {'benchmark_overview_film.pdf', 'benchmark_diversity.pdf', 'section4_analysis.pdf'}
@@ -120,7 +124,7 @@ def main():
         assert hashlib.sha256(png).hexdigest() == figure['sha256'], 'Original design image changed.'
         assert png[:8] == b'\x89PNG\r\n\x1a\n'
         assert struct.unpack('>II', png[16:24]) == (figure['width'], figure['height']), 'Original design image dimensions changed.'
-    print(f'PASS: {len(pages)} HTML pages, {checked} local links, owner alignment, 17 rows / 170 paper scores in JSON, CSV and static HTML, model-only Overall mean, unpublished paper exclusion, 3 original figure PDFs/renders, and the original design PNG.')
+    print(f'PASS: {len(pages)} HTML pages, {checked} local links, owner alignment, 17 rows / 170 paper scores in JSON, CSV and static HTML, model-only Overall mean, public arXiv links and local manuscript exclusion, 3 original figure PDFs/renders, and the original design PNG.')
 
 
 if __name__ == '__main__':

@@ -61,7 +61,7 @@ Both pages now use a spacious white presentation, graphite system sans-serif typ
 
 The conceptual memory scene adds three signal paths, orbit layers, node activation, central echoes, and gentle pointer depth. Browser checks verify actual motion, reduced-motion reset and freeze, offscreen pause and resume, repeated back/forward-cache lifecycle, and terminal cleanup. Scientific figures and all 170 reported scores remain unchanged.
 
-Conference submission and review-status promotion has been removed from public text. The unpublished paper PDF and its download links have been removed from the current release; no replacement preprint URL is advertised. Only the three user-approved original figure PDFs are allowed in the deployed site. The validator and ignore rule prevent reintroducing a paper PDF into the Pages assets.
+Conference submission and review-status promotion was removed from public text. At that stage, the unpublished paper PDF and its download links were removed and no replacement preprint URL was advertised. Only the three user-approved original figure PDFs are allowed in the deployed site. The validator and ignore rule prevent reintroducing a local manuscript PDF into the Pages assets.
 
 The Overview now credits all eight authors in the order shown in the supplied OpenReview screenshot. Aoyang Cai and Boning Zhao are marked as equal contributors, Zhiwei Yu and Guocai Yao as corresponding authors, and Shaoxuan Xie is assigned to BAAI according to the user's correction. An independent visual transcription and HTML review checked the names, order, institution numbering, contribution markers, and accessible labels. The author block was inspected at 320, 390, 768, and 1440px with no clipping or page overflow.
 
@@ -96,3 +96,13 @@ The code, website, documentation, and candidate-review process are ready for rel
 ## GitHub account username alignment
 
 On 2026-10-03, the owner account was renamed from `Alex0605goat` to `ZHAOAlexGoat`. The independent public `EMBER-Bench` repository keeps its identity and history. Current repository links, Pages URLs, site configuration, and owner-validation assertions use the new name. The October 2 review above preserves the username used at that time.
+
+## Public arXiv paper — 2026-10-11
+
+The user supplied the public preprint at [arXiv:2610.05013](https://arxiv.org/abs/2610.05013). The official abstract page was checked: the full title and eight-author order match the website, and v1 was submitted on 2026-10-04. Both navigation menus and footers now link to the paper. The homepage has a “Read the paper” hero button and a paper resource card; the leaderboard links its Table 2 provenance to arXiv. The repository README includes a prominent paper link and publication details.
+
+The paper URL is recorded in both site and leaderboard metadata and checked during CI. The score fingerprint, all 170 scores, the 16-model average, original figures, author markers, and pending dataset status remain unchanged. No local manuscript PDF or conference promotion is introduced.
+
+The public arXiv v1 PDF's Table 2 (page 8) was independently checked against the leaderboard JSON: all 17 row labels and all 170 accuracy values match exactly. The public PDF SHA-256 is `b52f90fe87da96e84fec82f93ce79259d2507b827fe9b4578b589206d1ab979f`. The public PDF's first-page affiliations and contribution markers also match the website.
+
+Independent source and diff review passed, as did static site validation and whitespace checks. Browser verification passed all 28 combinations of both pages, widths of 320, 390, 768, 851, 900, 1024, and 1440px, and JavaScript enabled or disabled. Paper and existing navigation links work, including the desktop/mobile breakpoint; no page overflow, missing images, script errors, or failed site resources were found.

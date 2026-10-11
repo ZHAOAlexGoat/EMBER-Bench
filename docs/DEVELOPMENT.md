@@ -17,10 +17,10 @@ Open `http://localhost:8000/` for the homepage and `http://localhost:8000/leader
 - `docs/index.html`: benchmark narrative and figures.
 - `docs/leaderboard.html`: leaderboard layout and table fallback.
 - `docs/assets/`: styles, interaction scripts, and original illustrations.
-- `docs/data/site.json`: repository ownership and repository links.
+- `docs/data/site.json`: repository ownership, repository links, and the public arXiv paper URL.
 - `docs/data/leaderboard.json`: paper results. Check the file's provenance metadata and score field names before editing.
 
-After a reviewed data edit, run `python scripts/sync_leaderboard.py` to regenerate the CSV and static HTML fallback from the JSON. `validate_site.py` pins the verified paper-table fingerprint and excludes the unpublished paper; an intentional correction or new manuscript revision also requires an evidence-backed fingerprint update. New protocols belong in a separately labeled results section.
+After a reviewed data edit, run `python scripts/sync_leaderboard.py` to regenerate the CSV and static HTML fallback from the JSON. `validate_site.py` pins the verified paper-table fingerprint, checks the public arXiv URL in site metadata, both pages, and the README, and excludes the local manuscript PDF from deployment. An intentional score correction or new manuscript revision also requires an evidence-backed fingerprint update. New protocols belong in a separately labeled results section.
 
 The Table 2 paper snapshot is a separate protocol from new unified-runner evaluations. Do not replace paper numbers with a rerun or a synthetic test output. See [leaderboard review](LEADERBOARD.md).
 
