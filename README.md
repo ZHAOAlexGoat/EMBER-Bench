@@ -1,91 +1,98 @@
-<div align="center">
-
 # EMBER-Bench
 
-### Benchmarking Cross-Event Causal Memory in Long-Horizon Embodied Tasks
+Benchmarking Cross-Event Causal Memory in Long-Horizon Embodied Tasks
 
-**Which past event matters for the next action?**
+[Paper](https://arxiv.org/abs/2610.05013) · [Dataset](https://huggingface.co/datasets/Alexzhao0605gt/EMBER-Bench) · [Homepage](https://zhaoalexgoat.github.io/EMBER-Bench/) · [Leaderboard](https://zhaoalexgoat.github.io/EMBER-Bench/leaderboard.html)
 
-[Paper · arXiv](https://arxiv.org/abs/2610.05013) · [Homepage](https://zhaoalexgoat.github.io/EMBER-Bench/) · [Leaderboard](https://zhaoalexgoat.github.io/EMBER-Bench/leaderboard.html) · [Evaluation code](evaluation/README.md) · [Dataset · Hugging Face](https://huggingface.co/datasets/Alexzhao0605gt/EMBER-Bench)
+EMBER-Bench evaluates cross-event causal memory in egocentric household videos: **699 four-choice questions from 189 tasks**. P asks for the next action; C asks which earlier event explains it.
 
-<img src="assets/memory-timeline.svg" alt="Past events leave persistent consequences that constrain the next action; causal traceback identifies the supporting event." width="100%">
+| Scenario | P | C |
+|---|---:|---:|
+| L1 Task Progress | 205 | 0 |
+| L2 Self-induced Anomaly | 113 | 58 |
+| L3 External Intervention | 128 | 60 |
+| L4 Compound Long-Horizon | 102 | 33 |
 
-**189 household tasks · 699 questions · 4 memory scenarios · 2 reasoning directions**
+## 1 Install
 
-</div>
+Use **Python 3.12** (3.10+ supported) and Git. The API client runs on **Windows, Linux, and macOS** and needs no GPU. FFmpeg is included through a Python dependency.
 
-## Paper
+[CI](https://github.com/ZHAOAlexGoat/EMBER-Bench/actions/workflows/ci.yml) checks installation, local API tests, and public data downloads on all three systems.
 
-[**EMBER-Bench: Benchmarking Cross-Event Causal Memory in Long-Horizon Embodied Tasks**](https://arxiv.org/abs/2610.05013)
+```bash
+git clone https://github.com/ZHAOAlexGoat/EMBER-Bench.git
+cd EMBER-Bench
+```
 
-Aoyang Cai, Boning Zhao, Shaoxuan Xie, Dahui Gao, Huan Yang, Zhongyuan Wang, Zhiwei Yu, Guocai Yao. Public preprint: **arXiv:2610.05013** (2026).
+Create and activate a virtual environment:
 
-## What EMBER-Bench measures
+| Terminal | Create | Activate |
+|---|---|---|
+| Windows Command Prompt | `py -3.12 -m venv .venv` | `.venv\Scripts\activate.bat` |
+| Linux or macOS Bash/Zsh | `python3 -m venv .venv` | `source .venv/bin/activate` |
 
-EMBER-Bench evaluates cross-event causal memory in recorded egocentric household activities. Models must use the continuing consequences of earlier events to decide what to do next after those events leave view. At fixed decision points, four-option questions evaluate **next-action prediction (P)** and **causal traceback (C)**. This is an offline reasoning benchmark; the task does not execute a robot policy.
+PowerShell: activate with `.\.venv\Scripts\Activate.ps1`. If script execution is blocked, use Command Prompt above, or replace `python` below with `.\.venv\Scripts\python.exe` without activation. Linux may require its `python3-venv` package.
 
-![Original overview of four memory scenarios and paired prediction/traceback questions](docs/assets/figures/benchmark_overview_film.png)
-
-Original figures: [Introduction](docs/assets/figures/benchmark_overview_film.pdf) · [Construction design](docs/assets/figures/benchmark_design.png) · [Dataset diversity](docs/assets/figures/benchmark_diversity.pdf) · [Experimental analysis](docs/assets/figures/section4_analysis.pdf). The website displays these figures with links to their unmodified source files.
-
-| Scenario | Memory requirement | P questions | C questions |
-|---|---|---:|---:|
-| **L1 · Task Progress** | Completed steps and prerequisites | 205 | — |
-| **L2 · Self-induced Anomaly** | Lingering consequences of the performer's mistakes | 113 | 58 |
-| **L3 · External Intervention** | Object state changes caused by another person | 128 | 60 |
-| **L4 · Compound Long-Horizon** | Multiple dependencies across intervening activities | 102 | 33 |
-| **Total** | | **548** | **151** |
-
-The 151 traceback questions are paired with prediction questions from the same decision points. Fine-grained event and causal annotations support the construction and diagnostic ablations.
-
-## Results from the paper
-
-The interactive [leaderboard](https://zhaoalexgoat.github.io/EMBER-Bench/leaderboard.html) contains the complete Table 2 snapshot: all 16 models, 10 accuracy columns, and a separate human reference. Search models, filter source class, sort each score column, and export CSV.
-
-| Reference | Overall | Prediction · P | Traceback · C |
-|---|---:|---:|---:|
-| Human, mean of 2 evaluators | **98.3** | 97.8 | 100.0 |
-| Gemini 3.8 Flash, best evaluated model | **61.2** | 58.4 | 71.5 |
-| Random-choice reference | 25.0 | 25.0 | 25.0 |
-
-All values are accuracy (%). Human and chance references are excluded from model ranks. Overall accuracy counts all 699 questions; unanswered items are incorrect.
-
-Across six models in the information ablation, action logs add **1.6 percentage points** on average. Privileged cause-and-consequence annotations add a further **13.0 points**. Correct traceback does not ensure a correct next-action prediction in the paired analysis. These findings concern the manuscript's reported settings; privileged annotations are diagnostic inputs.
-
-## Evaluate a model
-
-Start with the [end-to-end quick start](QUICKSTART.md): install, download a selected scenario/question type, configure an API or local model server, run a cheap test, then evaluate all 699 questions. The checked [Hugging Face dataset](https://huggingface.co/datasets/Alexzhao0605gt/EMBER-Bench) is public under CC BY-NC 4.0 (4.67 GiB); downloads require no login. Start with the free local API test, then download only the questions you need.
+Run the remaining commands from the repository root:
 
 ```bash
 python -m pip install -e .
-ember-bench api-test
-ember-bench --help
+python -m ember_bench api-test
 ```
 
-The CLI supports `--levels L1 L2 L3 L4`, `--tasks P C`, `--limit`, custom API/model configuration, integrity checks, and resumable runs. L1 contains only P. Media is distributed separately on Hugging Face under `Alexzhao0605gt/EMBER-Bench`; GitHub holds code and documentation. See the [dataset card](dataset_card/README.md), [evaluation README](evaluation/README.md), and [advanced usage reference](evaluation/docs/USAGE.md).
+`api-test` uses a local mock API: no key, data download, or paid calls.
 
-**Protocol boundary:** the provided unified runner differs from some model settings used for the frozen paper results. See the protocol comparison in the evaluation documentation. Running this code is not a claim of exact reproduction of Table 2. Offline tests and synthetic results must never be submitted as benchmark scores.
+## 2 Set your model and API
 
-Submit reproducible candidate results through a pull request using the [leaderboard review guide](docs/LEADERBOARD.md). Review is required before any website update.
-
-## Website and repository
-
-```text
-docs/                     GitHub Pages homepage, leaderboard, and original figures
-ember_bench/              Download, config, API-test, validation, and evaluation CLI
-evaluation/               Runner, model registry, tests, synthetic fixture, and guides
-dataset_card/             Hugging Face data card and CC BY-NC 4.0 license
-scripts/validate_site.py  Local link and paper-table consistency checks
-.github/workflows/        CI validation and GitHub Pages deployment
-REVIEW.md                 Release audit and verification evidence
-```
-
-Preview locally:
+For a multimodal OpenAI-compatible Chat Completions endpoint:
 
 ```bash
-python -m http.server 8000 --directory docs
+python -m ember_bench init --api-base https://YOUR_PROVIDER/v1 --model YOUR_MODEL
 ```
 
-Open `http://localhost:8000/`. See [website development and deployment](docs/DEVELOPMENT.md) for GitHub Pages setup and account alignment. Repository links use the owner **ZHAOAlexGoat**, matching the authenticated GitHub account.
+Set your key in the same terminal:
 
-The evaluation software uses [MIT](evaluation/LICENSE). The dataset uses [CC BY-NC 4.0](dataset_card/LICENSE), requiring attribution and noncommercial use. Neither license replaces the manuscript's own terms.
+| Terminal | Command |
+|---|---|
+| Windows PowerShell | `$env:EMBER_API_KEY = "YOUR_KEY"` |
+| Windows Command Prompt | `set "EMBER_API_KEY=YOUR_KEY"` |
+| Linux or macOS Bash/Zsh | `export EMBER_API_KEY="YOUR_KEY"` |
+
+`model.local.json` stores the API URL and exact model name; edit it to switch providers or models. Keys stay in environment variables. For a local model server, use `http://localhost:8000/v1`; set the key to `local` if authentication is disabled. The server must support image input.
+
+Chat mode sends sampled JPEG frames by default. Native MP4, Responses, and Gemini adapters are also available; see [API options](QUICKSTART.md#3-configure-an-api-or-a-local-model-server).
+
+## 3 Run one question
+
+```bash
+python -m ember_bench download --limit 1
+python -m ember_bench validate --limit 1
+python -m ember_bench evaluate --limit 1 --fps-ladder 1 --max-output-tokens 128 --out runs/first-test
+```
+
+Downloads are public and require no Hugging Face login. This reduced-sampling run checks connectivity at low cost; your API provider's charges apply. It is not a full benchmark score. `python -m ember_bench api-test --live` optionally tests your API with one tiny synthetic question.
+
+## 4 Run a category or the full benchmark
+
+```bash
+# L2 causal traceback only
+python -m ember_bench download --levels L2 --tasks C
+python -m ember_bench evaluate --levels L2 --tasks C --out runs/l2-c
+
+# All 699 questions, about 4.67 GiB of media
+python -m ember_bench download
+python -m ember_bench validate
+python -m ember_bench evaluate --out runs/full
+```
+
+Combine selections, for example `--levels L2 L3 --tasks P C`. L1 has P only. Use the same selection for download and evaluation. `--data-root PATH` changes the data location; quote paths containing spaces.
+
+Results are in `runs/NAME/V1M0/custom/summary.json`, with predictions in `selected.jsonl`. Rerun the same command to resume completed questions without repeat API calls. Use a new `--out` directory after changing model, configuration, subset, or code. The default evaluation uses a 5 → 3 → 1 Hz retry ladder and a 512-token output budget; report any changes.
+
+## Code and details
+
+`ember_bench/` provides the CLI; `evaluation/` contains inference, scoring, and model adapters; `docs/` contains the website. Evaluation media and annotations live on Hugging Face. Downloads pin a revision and verify file hashes.
+
+[Full guide](QUICKSTART.md) · [Data format and known limitations](docs/DATASET.md) · [Evaluation protocol](evaluation/README.md) · [Release checks](docs/RELEASE_20261017.md)
+
+The unified runner does not exactly reproduce every model-specific setting in the paper. Keep run manifests when reporting scores. Code: [MIT](evaluation/LICENSE). Data: [CC BY-NC 4.0](dataset_card/LICENSE), with attribution and noncommercial use. Cite the [EMBER-Bench paper](https://arxiv.org/abs/2610.05013). Contact: zhaoboning0605@gmail.com.

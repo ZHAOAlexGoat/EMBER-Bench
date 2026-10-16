@@ -1,8 +1,8 @@
 # Run EMBER-Bench
 
-Python 3.10+ is supported; Python 3.12 is tested. Commands below work from the repository root on Linux, macOS, and Windows. The CLI includes a packaged FFmpeg fallback.
+Python 3.10+ is supported; Python 3.12 is recommended. Installation, offline tests, the local API smoke test, and an anonymous data download are checked in CI on Windows, Linux, and macOS with Python 3.12, plus Linux with Python 3.10. The CLI includes a packaged FFmpeg fallback. Start with the [OS-specific environment setup](README.md#1-install); run the commands below from the repository root.
 
-**Data is available:** [Alexzhao0605gt/EMBER-Bench](https://huggingface.co/datasets/Alexzhao0605gt/EMBER-Bench) contains 699 checked questions (4.67 GiB) under CC BY-NC 4.0. Public downloads need no Hugging Face login. The verified release revision is `334cacb9f77b25a7b6cf882e80866356f19e7902`; use `--revision 334cacb9f77b25a7b6cf882e80866356f19e7902` with `download` to request this exact snapshot.
+**Data is available:** [Alexzhao0605gt/EMBER-Bench](https://huggingface.co/datasets/Alexzhao0605gt/EMBER-Bench) contains 699 checked questions (4.67 GiB) under CC BY-NC 4.0. Public downloads need no Hugging Face login. The verified snapshot with the current README is `789111aff84058db4bb1d2a2441e8fbd8ea469bc`; use `--revision 789111aff84058db4bb1d2a2441e8fbd8ea469bc` with `download` to request it. Media and annotations are unchanged from the original release.
 
 ## 1. Install
 
@@ -120,4 +120,4 @@ V1M0 is the main video/current-frame condition. `--condition V0M0` uses only cur
 ember-bench validate --decode
 ```
 
-This checks the full local dataset for complete decoding, silent streams, 5 Hz history, landscape dimensions, and zero display rotation. [Dataset card](dataset_card/README.md) documents preparation, the four rotated C-label layouts, brief OPTION markers, and other retained limitations. Data use is **CC BY-NC 4.0**; code is **MIT**.
+This checks the full local dataset for complete decoding, silent streams, 5 Hz history, landscape dimensions, and zero display rotation. [Data preparation and limitations](docs/DATASET.md) documents the four rotated C-label layouts, brief OPTION markers, and other retained limitations. Data use is **CC BY-NC 4.0**; code is **MIT**.
