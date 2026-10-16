@@ -54,15 +54,15 @@ Across six models in the information ablation, action logs add **1.6 percentage 
 
 ## Evaluate a model
 
-The complete public dataset release is **pending**. The evaluator accepts an actual catalog and pre-decision media once available. An offline synthetic smoke test verifies the runner without the dataset or paid API calls.
+Start with the [end-to-end quick start](QUICKSTART.md): install, download a selected scenario/question type, configure an API or local model server, run a cheap test, then evaluate all 699 questions. The dataset package has been checked locally; its public Hugging Face upload is **pending**. Code and the free local API test are ready.
 
 ```bash
-cd evaluation
-python -m pip install -r requirements.txt
-python ember_eval.py --help
+python -m pip install -e .
+ember-bench api-test
+ember-bench --help
 ```
 
-See [evaluation README](evaluation/README.md) for the offline smoke test, catalog specification, model configuration, API-key environment variables, evaluation conditions, resume behavior, and result export. [Quick start](evaluation/QUICKSTART.md) and [usage reference](evaluation/docs/USAGE.md) provide complete commands.
+The CLI supports `--levels L1 L2 L3 L4`, `--tasks P C`, `--limit`, custom API/model configuration, integrity checks, and resumable runs. L1 contains only P. Media is distributed separately on Hugging Face under `Alexzhao0605gt/EMBER-Bench`; GitHub holds code and documentation. See the [dataset card](dataset_card/README.md), [evaluation README](evaluation/README.md), and [advanced usage reference](evaluation/docs/USAGE.md).
 
 **Protocol boundary:** the provided unified runner differs from some model settings used for the frozen paper results. See the protocol comparison in the evaluation documentation. Running this code is not a claim of exact reproduction of Table 2. Offline tests and synthetic results must never be submitted as benchmark scores.
 
@@ -72,7 +72,9 @@ Submit reproducible candidate results through a pull request using the [leaderbo
 
 ```text
 docs/                     GitHub Pages homepage, leaderboard, and original figures
+ember_bench/              Download, config, API-test, validation, and evaluation CLI
 evaluation/               Runner, model registry, tests, synthetic fixture, and guides
+dataset_card/             Hugging Face data card and CC BY-NC 4.0 license
 scripts/validate_site.py  Local link and paper-table consistency checks
 .github/workflows/        CI validation and GitHub Pages deployment
 REVIEW.md                 Release audit and verification evidence
@@ -86,4 +88,4 @@ python -m http.server 8000 --directory docs
 
 Open `http://localhost:8000/`. See [website development and deployment](docs/DEVELOPMENT.md) for GitHub Pages setup and account alignment. Repository links use the owner **ZHAOAlexGoat**, matching the authenticated GitHub account.
 
-The evaluation software is provided under its [MIT license](evaluation/LICENSE). This software license does not establish a license for the manuscript or the pending dataset release.
+The evaluation software uses [MIT](evaluation/LICENSE). The dataset uses [CC BY-NC 4.0](dataset_card/LICENSE), requiring attribution and noncommercial use. Neither license replaces the manuscript's own terms.

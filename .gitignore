@@ -12,6 +12,11 @@ output/
 runs/
 evaluation/runs/
 evaluation/.media_cache/
+/data/
+/model.local.json
+*.egg-info/
+/build/
+/dist/
 *.log
 .DS_Store
 Thumbs.db

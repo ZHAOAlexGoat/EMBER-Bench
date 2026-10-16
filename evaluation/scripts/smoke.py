@@ -31,7 +31,12 @@ class MockHandler(BaseHTTPRequestHandler):
         answer = 'D' if 'SYNTHETIC_SCENARIO_4' in text else 'A'
         raw = 'invalid mock format' if 'SYNTHETIC_SCENARIO_4' in text and 'at 5 fps' in text else f'Final Answer: [{answer}]'
         if self.path.endswith('/chat/completions'):
-            assert any(part.get('type') == 'video_url' for part in body['messages'][0]['content'])
+            content = body['messages'][0]['content']
+            if body['model'] == 'mock-chat-frames':
+                assert len([part for part in content if part.get('type') == 'image_url']) >= 2
+                assert not any(part.get('type') == 'video_url' for part in content)
+            else:
+                assert any(part.get('type') == 'video_url' for part in content)
             response = {'id': 'synthetic-chat', 'model': body['model'],
                         'choices': [{'message': {'content': raw}, 'finish_reason': 'stop'}]}
         elif self.path.endswith(':generateContent'):
@@ -58,6 +63,7 @@ class MockHandler(BaseHTTPRequestHandler):
 
 
 def smoke(out):
+    MockHandler.requests_seen = 0
     out = Path(out).resolve()
     if out.exists() and any(out.iterdir()):
         raise ValueError('smoke needs a new or empty output directory; fixture ports change between smoke sessions')
@@ -73,6 +79,8 @@ def smoke(out):
     for protocol in ('chat', 'gemini', 'responses'):
         cfg['endpoints'][protocol] = {'protocol': protocol, 'base_url': base, 'key_env': 'EMBER_SYNTHETIC_KEY'}
         cfg['models']['mock-' + protocol] = {'name': 'Synthetic ' + protocol, 'endpoint': protocol}
+    cfg['endpoints']['chat-frames'] = dict(cfg['endpoints']['chat'], input_mode='frames')
+    cfg['models']['mock-chat-frames'] = {'name': 'Synthetic chat frames', 'endpoint': 'chat-frames'}
     config = out / '_inputs' / 'models.json'
     config.write_text(json.dumps(cfg, indent=2), encoding='utf-8')
     env = {**os.environ, 'EMBER_SYNTHETIC_KEY': 'synthetic-local-only'}
@@ -82,8 +90,8 @@ def smoke(out):
         subprocess.run(command + ['--validate-catalog'], env=env, check=True)
         subprocess.run(command, env=env, check=True)
         requests_after_run = MockHandler.requests_seen
-        if requests_after_run != 15:
-            raise AssertionError(f'expected 15 mock attempts, got {requests_after_run}')
+        if requests_after_run != 20:
+            raise AssertionError(f'expected 20 mock attempts, got {requests_after_run}')
         subprocess.run(command, env=env, check=True)
         subprocess.run(command + ['--summarize'], env=env, check=True)
         if MockHandler.requests_seen != requests_after_run:
@@ -94,7 +102,7 @@ def smoke(out):
                 raise AssertionError('synthetic accuracy must be 75%, with all four answers valid')
             candidate_path = out / f'{model}.candidate.json'
             candidate_path.write_text(json.dumps(candidate, indent=2) + '\n', encoding='utf-8')
-        print('OFFLINE SMOKE OK: 3 protocols; 15 mock attempts; 5→3 fallback; resume/summarize made 0 requests; 3 validated synthetic candidates.')
+        print('OFFLINE SMOKE OK: 3 protocols / 4 input adapters; 20 mock attempts; 5-to-3 fallback; resume/summarize made 0 requests; 4 validated synthetic candidates.')
     finally:
         server.shutdown()
         server.server_close()

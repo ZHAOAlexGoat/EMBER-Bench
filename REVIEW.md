@@ -1,3 +1,5 @@
+Latest dataset/CLI preparation evidence: [2026-10-17 release audit](docs/RELEASE_20261017.md). The review below records the earlier website and evaluator release.
+
 # Initial release review
 
 Reviewed on **2026-10-02** before uploading the website and evaluation package to the aligned GitHub account, **Alex0605goat**.

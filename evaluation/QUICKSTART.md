@@ -1,3 +1,7 @@
+# Public CLI
+
+New users should start with the [repository quick start](../QUICKSTART.md), which covers data download, scenario/type selection, and custom/local API setup. The commands below describe the lower-level runner.
+
 # Quick start
 
 Run these commands from the repository's `evaluation/` directory with Python 3.10+.

@@ -1,0 +1,15 @@
+EMBER-Bench dataset
+Copyright (c) 2026 EMBER-Bench authors.
+
+This dataset is licensed under the Creative Commons Attribution-NonCommercial
+4.0 International License (CC BY-NC 4.0).
+
+License: https://creativecommons.org/licenses/by-nc/4.0/
+Legal code: https://creativecommons.org/licenses/by-nc/4.0/legalcode.en
+
+Attribution: EMBER-Bench: Benchmarking Cross-Event Causal Memory in Long-Horizon
+Embodied Tasks, Aoyang Cai, Boning Zhao, Shaoxuan Xie, Dahui Gao, Huan Yang,
+Zhongyuan Wang, Zhiwei Yu, and Guocai Yao (2026).
+https://arxiv.org/abs/2610.05013
+
+The MIT license for the evaluation software does not replace this dataset license.

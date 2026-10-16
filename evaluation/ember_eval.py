@@ -149,6 +149,10 @@ def validate_config(cfg):
         for k in ('max_images', 'base64_max_bytes'):
             if k in ep and (type(ep[k]) is not int or ep[k] <= 0):
                 raise ValueError(f'endpoint {name}: {k} must be a positive integer')
+        if ep.get('input_mode', 'video') not in ('video', 'frames'):
+            raise ValueError(f'endpoint {name}: input_mode must be video or frames')
+        if ep.get('input_mode') == 'frames' and ep['protocol'] == 'gemini':
+            raise ValueError(f'endpoint {name}: Gemini uses native video input')
     for model, entry in cfg['models'].items():
         if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]*', model) or model in ('.', '..'):
             raise ValueError(f'unsafe model id: {model!r}; use a simple id and optional api_model')
@@ -386,6 +390,10 @@ def request_chat(model, ep, key, parts_in):
             parts.append({'type': 'text', 'text': val})
         elif kind == 'image':
             parts.append({'type': 'image_url', 'image_url': {'url': 'data:' + image_mime(val) + ';base64,' + b64(val)}})
+        elif kind == 'frames':
+            for frame in val:
+                parts.append({'type': 'image_url', 'image_url': {
+                    'url': 'data:' + image_mime(frame) + ';base64,' + b64(frame)}})
         else:
             if Path(val).stat().st_size <= ep.get('base64_max_bytes', 1 << 62):
                 url = 'data:video/mp4;base64,' + b64(val)
@@ -512,7 +520,7 @@ def attempt(model, item, cond, fps, stage, tries, cache, args):
             row['n_frames'] = n
             if n > ep.get('max_images', 1 << 62):
                 raise RuntimeError(f'too_many_frames: {n} > {ep["max_images"]}')
-            if ep['protocol'] == 'responses':
+            if ep['protocol'] == 'responses' or ep.get('input_mode') == 'frames':
                 source_sha = item['history_sha256'] if args.verify_sha else sha(src)
                 hist = frames_at(src, source_sha, fps, cache)
                 row['n_frames'] = len(hist) + 1
@@ -793,6 +801,11 @@ def load_catalog(args):
                 raise ValueError('paired ablations require --questions with matched NA ids or explicit is_paired=true; L2-L4 alone are not the paired subset')
     elif keep is not None:
         cat = [it for it in cat if it['question_id'] in keep]
+    if getattr(args, 'levels', None):
+        cat = [it for it in cat if it['level'] in args.levels]
+    if getattr(args, 'tasks', None):
+        wanted = {'NA' if task == 'P' else 'CB' for task in args.tasks}
+        cat = [it for it in cat if it['qa_type'] in wanted]
     cat = cat[:args.limit] if args.limit else cat
     if not cat:
         raise ValueError('no questions remain after condition/subset filtering')
@@ -845,6 +858,10 @@ def main():
     ap.add_argument('--path-map', nargs='*', default=[], help='OLD_PREFIX=NEW_PREFIX for media paths')
     ap.add_argument('--questions', help='file with question_ids to run (whitespace separated)')
     ap.add_argument('--limit', type=int, help='first N items only (smoke test)')
+    ap.add_argument('--levels', nargs='+', choices=['L1', 'L2', 'L3', 'L4'], help='scenario subset; default all')
+    ap.add_argument('--tasks', nargs='+', choices=['P', 'C'], help='P prediction / C traceback; default both')
+    ap.add_argument('--max-output-tokens', type=int, help='override output budget (recorded in run identity)')
+    ap.add_argument('--fps-ladder', type=int, nargs='+', help='override sampling rates, e.g. 1 for a cheap smoke run')
     ap.add_argument('--no-verify-sha', dest='verify_sha', action='store_false')
     ap.add_argument('--summarize', action='store_true', help='only rebuild selected.jsonl / summary.json')
     ap.add_argument('--validate-catalog', action='store_true', help='validate selected catalog/media then exit without requests or API keys')
@@ -856,6 +873,10 @@ def main():
             raise ValueError('--summarize and --validate-catalog are mutually exclusive')
         CONFIG_PATH = Path(args.config).resolve()
         CFG = json.loads(CONFIG_PATH.read_text(encoding='utf-8-sig'))
+        if args.max_output_tokens is not None:
+            CFG['defaults']['max_output_tokens'] = args.max_output_tokens
+        if args.fps_ladder is not None:
+            CFG['defaults']['fps_ladder'] = args.fps_ladder
         validate_config(CFG)
         DEF = CFG['defaults']
     except (ValueError, OSError) as exc:

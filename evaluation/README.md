@@ -1,5 +1,7 @@
 # EMBER-Bench evaluation
 
+For the simplest clone → download → API test → evaluation workflow, use the repository's [public CLI quick start](../QUICKSTART.md). It supports L1–L4 and P/C subsets, custom deployments, and local compatible model servers.
+
 This package provides an audited **unified evaluation runner** for next-action prediction (`NA`, paper **P**) and causal traceback (`CB`, paper **C**). It preserves the supplied implementation's prompts, media adapters, and first-valid-answer scoring, with corrections for unsafe catalog parsing, annotation leakage into CoT, ambiguous answers, subset selection, resume, and reporting.
 
 **The runner is not an exact reproduction of the frozen results in paper Table 2.** The website's paper leaderboard and new unified-runner candidates are separate. No paid provider evaluation or reproduction of the 16 paper model scores was performed during this release review. The checked-in model registry is a configuration snapshot; API access, model names, and availability require verification with the selected provider.
@@ -21,7 +23,7 @@ For development, `python -m pip install -r requirements-dev.txt` also installs p
 
 ## Evaluate prepared benchmark inputs
 
-The real dataset, frozen catalog, paired-question lists, and historical provider logs are not bundled with this code. A complete research run requires those assets. See [catalog format and preprocessing responsibilities](docs/CATALOG.md); the tiny [synthetic fixture](fixtures/synthetic/README.md) is only an executable schema example.
+Benchmark media and the aligned portable catalog are distributed separately through Hugging Face (upload currently awaiting account verification). The public catalog carries explicit pairing metadata; historical provider logs are not included. Use `ember-bench download` after publication, then supply `data/EMBER-Bench/catalog.json` to the lower-level runner below. See [catalog format and preprocessing responsibilities](docs/CATALOG.md); the tiny [synthetic fixture](fixtures/synthetic/README.md) is only an executable schema example.
 
 ```bash
 # Validate the selected catalog and media hashes without requests or API keys.

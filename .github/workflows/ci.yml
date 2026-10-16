@@ -14,9 +14,10 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install evaluation and test dependencies
-        run: python -m pip install -r evaluation/requirements.txt pytest
+        run: python -m pip install -e '.[dev]'
       - name: Validate website and paper results
         run: python scripts/validate_site.py
       - name: Run offline evaluation tests
-        working-directory: evaluation
-        run: python -m pytest tests -q
+        run: python -m pytest evaluation/tests tests -q
+      - name: Exercise public CLI and local API transports
+        run: ember-bench api-test --out runs/ci-smoke

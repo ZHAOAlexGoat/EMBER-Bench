@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ember-bench"
+version = "0.1.0"
+description = "EMBER-Bench dataset download, API testing, and evaluation"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "evaluation/LICENSE"}
+dependencies = ["requests>=2.31,<3", "huggingface-hub>=0.27,<3", "imageio-ffmpeg>=0.5,<1"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "Pillow>=10", "opencv-python-headless>=4.9"]
+
+[project.scripts]
+ember-bench = "ember_bench.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["ember_bench*", "evaluation*"]
+exclude = ["evaluation.tests*"]
+
+[tool.setuptools.package-data]
+evaluation = ["configs/*.json", "fixtures/synthetic/*", "LICENSE"]
