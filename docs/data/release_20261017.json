@@ -1,0 +1,21 @@
+{
+  "release_date": "2026-10-17",
+  "repo_id": "Alexzhao0605gt/EMBER-Bench",
+  "revision": "334cacb9f77b25a7b6cf882e80866356f19e7902",
+  "public": true,
+  "remote_files_verified": 1406,
+  "release_sha256": "0ce4c47ea14e121ebd8d6d726e88a8fa0d14ebb68d947ff65c776b287dfb8e15",
+  "anonymous_end_to_end": {
+    "status": "PASS",
+    "anonymous_download": true,
+    "repo_id": "Alexzhao0605gt/EMBER-Bench",
+    "revision": "334cacb9f77b25a7b6cf882e80866356f19e7902",
+    "release_sha256": "0ce4c47ea14e121ebd8d6d726e88a8fa0d14ebb68d947ff65c776b287dfb8e15",
+    "selected_questions": 7,
+    "verified_media_files": 14,
+    "scenario_type_cells": 7,
+    "local_api_requests": 7,
+    "resume_requests": 0,
+    "paid_requests": 0
+  }
+}

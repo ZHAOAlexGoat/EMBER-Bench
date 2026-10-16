@@ -2,7 +2,7 @@
 
 Python 3.10+ is supported; Python 3.12 is tested. Commands below work from the repository root on Linux, macOS, and Windows. The CLI includes a packaged FFmpeg fallback.
 
-**Release status:** the evaluation data package is checked locally; public upload to `Alexzhao0605gt/EMBER-Bench` is pending. The download commands below become available when that dataset is published. The free API test works now.
+**Data is available:** [Alexzhao0605gt/EMBER-Bench](https://huggingface.co/datasets/Alexzhao0605gt/EMBER-Bench) contains 699 checked questions (4.67 GiB) under CC BY-NC 4.0. Public downloads need no Hugging Face login. The verified release revision is `334cacb9f77b25a7b6cf882e80866356f19e7902`; use `--revision 334cacb9f77b25a7b6cf882e80866356f19e7902` with `download` to request this exact snapshot.
 
 ## 1. Install
 

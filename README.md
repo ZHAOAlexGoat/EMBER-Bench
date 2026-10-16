@@ -6,7 +6,7 @@
 
 **Which past event matters for the next action?**
 
-[Paper · arXiv](https://arxiv.org/abs/2610.05013) · [Homepage](https://zhaoalexgoat.github.io/EMBER-Bench/) · [Leaderboard](https://zhaoalexgoat.github.io/EMBER-Bench/leaderboard.html) · [Evaluation code](evaluation/README.md)
+[Paper · arXiv](https://arxiv.org/abs/2610.05013) · [Homepage](https://zhaoalexgoat.github.io/EMBER-Bench/) · [Leaderboard](https://zhaoalexgoat.github.io/EMBER-Bench/leaderboard.html) · [Evaluation code](evaluation/README.md) · [Dataset · Hugging Face](https://huggingface.co/datasets/Alexzhao0605gt/EMBER-Bench)
 
 <img src="assets/memory-timeline.svg" alt="Past events leave persistent consequences that constrain the next action; causal traceback identifies the supporting event." width="100%">
 
@@ -54,7 +54,7 @@ Across six models in the information ablation, action logs add **1.6 percentage 
 
 ## Evaluate a model
 
-Start with the [end-to-end quick start](QUICKSTART.md): install, download a selected scenario/question type, configure an API or local model server, run a cheap test, then evaluate all 699 questions. The dataset package has been checked locally; its public Hugging Face upload is **pending**. Code and the free local API test are ready.
+Start with the [end-to-end quick start](QUICKSTART.md): install, download a selected scenario/question type, configure an API or local model server, run a cheap test, then evaluate all 699 questions. The checked [Hugging Face dataset](https://huggingface.co/datasets/Alexzhao0605gt/EMBER-Bench) is public under CC BY-NC 4.0 (4.67 GiB); downloads require no login. Start with the free local API test, then download only the questions you need.
 
 ```bash
 python -m pip install -e .

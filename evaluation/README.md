@@ -23,7 +23,7 @@ For development, `python -m pip install -r requirements-dev.txt` also installs p
 
 ## Evaluate prepared benchmark inputs
 
-Benchmark media and the aligned portable catalog are distributed separately through Hugging Face (upload currently awaiting account verification). The public catalog carries explicit pairing metadata; historical provider logs are not included. Use `ember-bench download` after publication, then supply `data/EMBER-Bench/catalog.json` to the lower-level runner below. See [catalog format and preprocessing responsibilities](docs/CATALOG.md); the tiny [synthetic fixture](fixtures/synthetic/README.md) is only an executable schema example.
+Benchmark media and the aligned portable catalog are available in [Alexzhao0605gt/EMBER-Bench on Hugging Face](https://huggingface.co/datasets/Alexzhao0605gt/EMBER-Bench) under CC BY-NC 4.0. No login is needed. The public catalog carries explicit pairing metadata; historical provider logs are not included. Use `ember-bench download`, then supply `data/EMBER-Bench/catalog.json` to the lower-level runner below. See [catalog format and preprocessing responsibilities](docs/CATALOG.md); the tiny [synthetic fixture](fixtures/synthetic/README.md) is only an executable schema example.
 
 ```bash
 # Validate the selected catalog and media hashes without requests or API keys.

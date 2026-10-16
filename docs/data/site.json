@@ -2,5 +2,7 @@
   "repository": "https://github.com/ZHAOAlexGoat/EMBER-Bench",
   "owner": "ZHAOAlexGoat",
   "paper": "https://arxiv.org/abs/2610.05013",
-  "datasetStatus": "pending"
+  "datasetStatus": "available",
+  "dataset": "https://huggingface.co/datasets/Alexzhao0605gt/EMBER-Bench",
+  "datasetRevision": "334cacb9f77b25a7b6cf882e80866356f19e7902"
 }
