@@ -7,12 +7,21 @@ permissions:
   contents: read
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    name: ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ['3.12']
+        include:
+          - os: ubuntu-latest
+            python: '3.10'
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: ${{ matrix.python }}
       - name: Install evaluation and test dependencies
         run: python -m pip install -e '.[dev]'
       - name: Validate website and paper results
@@ -20,4 +29,10 @@ jobs:
       - name: Run offline evaluation tests
         run: python -m pytest evaluation/tests tests -q
       - name: Exercise public CLI and local API transports
-        run: ember-bench api-test --out runs/ci-smoke
+        run: python -m ember_bench api-test --out "runs/ci smoke"
+      - name: Download and validate a public question without credentials
+        env:
+          HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+        run: |
+          python -m ember_bench download --levels L1 --tasks P --limit 1 --data-root "runs/public data"
+          python -m ember_bench validate --levels L1 --tasks P --limit 1 --data-root "runs/public data"
