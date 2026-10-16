@@ -1,4 +1,4 @@
-/* Homepage-only decorative guest; preserve the footer's existing flow. */
-.footer-wordmark{position:relative;display:inline-block}
-.footer-guest{position:absolute;right:calc(100% + 9px);bottom:0;width:46px;height:56px;max-width:none;object-fit:contain;pointer-events:none;user-select:none}
-@media(max-width:1150px){.footer-wordmark{margin-left:55px}}
+/* Homepage-only decorative guest, centered beside the complete text group. */
+.footer-brand-with-guest{display:flex;align-items:center;gap:16px}
+.footer-copy{min-width:0}
+.footer-guest{flex:0 0 64px;width:64px;height:78px;max-width:none;object-fit:contain;pointer-events:none;user-select:none}
