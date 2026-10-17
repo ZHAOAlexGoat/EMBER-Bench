@@ -1,0 +1,117 @@
+{
+  "status": "PASS",
+  "checked_at": "2026-10-17T10:32:13.307702+00:00",
+  "hf_revision": "789111aff84058db4bb1d2a2441e8fbd8ea469bc",
+  "questions": 699,
+  "videos": 699,
+  "images": 699,
+  "media_bytes": 5017144232,
+  "video_bytes": 4959978024,
+  "image_bytes": 57166208,
+  "counts": {
+    "L1-P": 205,
+    "L2-P": 113,
+    "L2-C": 58,
+    "L3-P": 128,
+    "L3-C": 60,
+    "L4-P": 102,
+    "L4-C": 33
+  },
+  "anonymous_full_download": true,
+  "byte_identical_to_local_evaluation": true,
+  "canonical_media_index_match": true,
+  "metadata": {
+    "missing": 0,
+    "extra": 0,
+    "duration_mismatches": 0,
+    "resolution_mismatches": 0,
+    "truncated": 0,
+    "audio_streams": 0
+  },
+  "decoded_frames": 425621,
+  "decode_failures": 0,
+  "landscape": true,
+  "display_rotation": 0,
+  "history_hz": 5,
+  "source_question_banks": 7,
+  "answers_and_decision_frames_checked": 699,
+  "paired_decisions_checked": 151,
+  "regression_tests": 35,
+  "regression_subtests": 10,
+  "wheel_import_and_offline_api": "PASS",
+  "category_cli_checks": [
+    {
+      "level": "L1",
+      "task": "P",
+      "count": 205,
+      "status": "PASS"
+    },
+    {
+      "level": "L2",
+      "task": "P",
+      "count": 113,
+      "status": "PASS"
+    },
+    {
+      "level": "L2",
+      "task": "C",
+      "count": 58,
+      "status": "PASS"
+    },
+    {
+      "level": "L3",
+      "task": "P",
+      "count": 128,
+      "status": "PASS"
+    },
+    {
+      "level": "L3",
+      "task": "C",
+      "count": 60,
+      "status": "PASS"
+    },
+    {
+      "level": "L4",
+      "task": "P",
+      "count": 102,
+      "status": "PASS"
+    },
+    {
+      "level": "L4",
+      "task": "C",
+      "count": 33,
+      "status": "PASS"
+    }
+  ],
+  "evaluation": {
+    "real_media_questions": 699,
+    "local_mock_requests": 699,
+    "transmitted_images": 85828,
+    "smoke_hz": 1,
+    "paid_requests": 0,
+    "resume_requests": 0,
+    "summarize_requests": 0,
+    "public_cells": 7,
+    "invalid_response_counts_as_wrong": true,
+    "authorization_exit_code": 2,
+    "resume_after_authorization_fix": true,
+    "terminal_metrics_match_json": true
+  },
+  "hf_catalog_sha256": "39de2bd6b745b396d18413dc91fc2eaab19d7051dafb02500e9bdf83239753b4",
+  "local_catalog_sha256": "39de2bd6b745b396d18413dc91fc2eaab19d7051dafb02500e9bdf83239753b4",
+  "release_sha256": "5bdc723abcd33528d2196ec1b3d6ff5eeccd4ce74126c6c50bd9d3187e68ceb6",
+  "csv_sha256": "5f239625c43ec55fecbc91f2bc8f2634ae6c16aac35002f0438641b93d36712b",
+  "tested_evaluator_sha256": "87b7ce51872a966aa70b60ed33ed99c9fb1321987b8ef5ce8e73ee1202c5bdc7",
+  "mock_artifact_sha256": {
+    "manifest.json": "12e6243443afb8e59c336b076f08b744a6ab88c98cfc693e9cafe220971981d9",
+    "attempts.jsonl": "760d35f0336509d6216c94512665a06e2d048070e8ad840a235e8765d03b2bfb",
+    "selected.jsonl": "a47060c35284594d2970b806aa1746e60b65c6ee33dc2387819be9430d14f3cf",
+    "summary.json": "406b3df3274e7f23a72a9c2c097a71f235606e67638a5b869409ee00ab64eb30"
+  },
+  "limits": [
+    "Local mock tests validate transport and scoring, not model capability or paid provider behavior.",
+    "Upright ego presentation uses the prior 10/50/90% visual review of identical media, not a new every-frame semantic review.",
+    "Four C videos retain vertical OPTION lettering; five C clips have brief gold-label exposure.",
+    "No claim of exact frozen paper-score reproduction."
+  ]
+}

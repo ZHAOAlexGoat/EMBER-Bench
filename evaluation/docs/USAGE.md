@@ -76,6 +76,8 @@ OUT/
 
 `summary.json` retains `P`/`C` names for compatibility; `selected.jsonl` uses `NA`/`CB`. `overall` is pooled question accuracy, not the average of P and C percentages. Empty splits are `null`; unanswered questions remain in denominators and score zero. `run_status` is `complete` only when every selected question has a valid answer or all configured nonfatal retry stages are exhausted. `incomplete_questions` and `never_attempted` distinguish an interrupted run from ordinary answered/failed items.
 
+The terminal prints the same metrics as a readable table, including question counts, valid/unanswered/pending counts, status, and absolute result paths. Empty splits display `N/A`; JSON retains `null`. Mock runs are labeled `MOCK TEST`. Interrupted runs display `INCOMPLETE RUN` and must be resumed before reporting a final score. Retry-exhausted questions are counted as done on resume and remain incorrect; they are not requested again. `--summarize` returns an error if a requested model has no attempt journal at the specified output path.
+
 ```bash
 python scripts/analyze_results.py runs/main/V1M0
 python scripts/export_submission.py --run-dir runs/main/V1M0/my-model --output runs/my-model.candidate.json

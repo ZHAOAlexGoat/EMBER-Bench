@@ -691,12 +691,12 @@ def run_model(model, catalog, args):
                     STATE['cooldown'] = max(STATE['cooldown'], time.monotonic() + 30 * t)
             print(f'  {model} {item["question_id"]} stage {stage} failed: {r["api_error"][:120]}', flush=True)
 
-    todo = [it for it in catalog if not any(r['valid_answer'] for r in hist.get(it['question_id'], []))]
+    todo = [it for it in catalog if not item_complete(hist.get(it['question_id'], []), ladder)]
     print(f'{model}: {len(catalog) - len(todo)} done, {len(todo)} to run', flush=True)
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         for i, f in enumerate(as_completed([pool.submit(job, it) for it in todo]), 1):
             f.result()
-            if i % 25 == 0:
+            if i % 25 == 0 or i == len(todo):
                 print(f'  {model} {i}/{len(todo)}', flush=True)
     if halt.is_set():
         print(f'{model}: halted on authorization/quota error; rerun to resume', flush=True)
@@ -742,7 +742,37 @@ def summarize_model(model, catalog, out, cond):
     summ['attempts_sha256'] = sha(out / 'attempts.jsonl') if (out / 'attempts.jsonl').exists() else None
     write_json(out / 'summary.json', summ)
     print(json.dumps(summ, ensure_ascii=False), flush=True)
+    print_result_summary(summ, out)
     return summ
+
+
+def print_result_summary(summary, out):
+    """Readable terminal metrics use the same values written to summary.json."""
+    synthetic = bool(CFG.get('_synthetic', False))
+    label = 'MOCK TEST - not a benchmark score' if synthetic else 'Evaluation results'
+    print(f'\n{label}: {summary["model"]} / {summary["condition"]}')
+    print(f'Status: {summary["run_status"].upper()} | Questions: {summary["n"]} | '
+          f'Valid answers: {summary["n"] - summary["unanswered"]} | '
+          f'Unanswered: {summary["unanswered"]} | Pending: {summary["incomplete_questions"]}')
+    print(f'{"Split":<12}{"Questions":>10}{"Accuracy":>12}')
+    for label, count_key, score_key in [('Overall', 'total', 'overall'), ('P', 'NA', 'P'), ('C', 'CB', 'C')]:
+        score = summary[score_key]
+        value = 'N/A' if score is None else f'{score:.1f}%'
+        print(f'{label:<12}{summary["counts"][count_key]:>10}{value:>12}')
+    for level in ('L1', 'L2', 'L3', 'L4'):
+        for task, legacy in (('P', 'NA'), ('C', 'CB')):
+            key = f'{legacy}_{level}'
+            if key in summary['counts']:
+                score = summary[f'{task}_{level}']
+                value = 'N/A' if score is None else f'{score:.1f}%'
+                print(f'{level + "-" + task:<12}{summary["counts"][key]:>10}{value:>12}')
+    if summary['incomplete_questions']:
+        print('INCOMPLETE RUN: the displayed scores include pending questions as incorrect. Resume before reporting a final score.')
+    elif summary['unanswered']:
+        print('Unanswered questions exhausted their retries and count as incorrect. Inspect attempts.jsonl for API/format errors.')
+    print(f'Results: {(Path(out) / "summary.json").resolve()}')
+    print(f'Predictions: {(Path(out) / "selected.jsonl").resolve()}')
+    print(f'Attempts and provenance: {Path(out).resolve()}', flush=True)
 
 
 def load_catalog(args):
@@ -899,10 +929,12 @@ def main():
         return
     if args.summarize:
         base = Path(args.out) / args.condition
+        missing = [m for m in models if not (base / m / 'attempts.jsonl').exists()]
+        if missing:
+            raise ValueError(f'no attempts.jsonl for model(s) {missing} under {base}; check --out and run evaluation first')
         for m in models:
-            if (base / m / 'attempts.jsonl').exists():
-                ensure_manifest(m, cat, base / m, args)
-                summarize_model(m, cat, base / m, args.condition)
+            ensure_manifest(m, cat, base / m, args)
+            summarize_model(m, cat, base / m, args.condition)
         return
     if not FFMPEG and args.condition != 'V0M0':
         raise SystemExit('ffmpeg not found (install ffmpeg or pip install imageio-ffmpeg)')

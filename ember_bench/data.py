@@ -1,5 +1,5 @@
 """Revision-pinned, subset-aware dataset downloads with SHA-256 verification."""
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import hashlib
 import json
 import os
@@ -118,7 +118,11 @@ def download(root, repo_id=REPO_ID, revision=None, levels=None, tasks=None, limi
                    verified_question_ids=previous.get('verified_question_ids', []))
     atomic_json(receipt_path, receipt)
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        list(pool.map(lambda pair: fetch(*pair), files.items()))
+        futures = [pool.submit(fetch, name, checksum) for name, checksum in files.items()]
+        for completed, future in enumerate(as_completed(futures), 1):
+            future.result()
+            if completed % 25 == 0 or completed == len(files):
+                print(f'Media verified: {completed}/{len(files)}', flush=True)
     verify(root, chosen)
     receipt['verified_question_ids'] = sorted(set(receipt['verified_question_ids']) | {r['question_id'] for r in chosen})
     atomic_json(receipt_path, receipt)

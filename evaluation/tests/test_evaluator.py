@@ -195,6 +195,35 @@ class EvaluatorTests(unittest.TestCase):
         self.assertEqual(candidate['run_status'], 'complete')
         self.assertEqual(candidate['unanswered'], 1)
 
+    def test_resume_reports_exhausted_questions_as_done(self):
+        item = self.catalog[0]
+        self.initialize([self.attempt(item, '', stage=stage, error='empty_response') for stage in (1, 2, 3)])
+        output = io.StringIO()
+        with patch.object(ev, 'attempt') as transport, contextlib.redirect_stdout(output):
+            self.assertTrue(ev.run_model(self.model, [item], self.args))
+        transport.assert_not_called()
+        self.assertIn('1 done, 0 to run', output.getvalue())
+        self.assertIn('Unanswered: 1 | Pending: 0', output.getvalue())
+
+    def test_terminal_summary_matches_artifacts_and_flags_incomplete(self):
+        self.initialize([self.attempt(self.catalog[0], '', error='empty_response')])
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            summary = ev.summarize_model(self.model, self.catalog[:1], self.out, 'V1M0')
+        text = output.getvalue()
+        self.assertIn('Status: INCOMPLETE | Questions: 1 | Valid answers: 0 | Unanswered: 1 | Pending: 1', text)
+        self.assertIn('INCOMPLETE RUN', text)
+        self.assertIn('N/A', text)
+        self.assertIn(str((self.out / 'summary.json').resolve()), text)
+        self.assertEqual(summary, json.loads((self.out / 'summary.json').read_text()))
+
+    def test_summarize_missing_run_fails_visibly(self):
+        result = subprocess.run([sys.executable, str(HERE / 'ember_eval.py'), '--catalog', str(self.catalog_path),
+                                 '--out', str(self.root / 'missing'), '--models', self.model, '--summarize'],
+                                capture_output=True, text=True, timeout=30)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('no attempts.jsonl', result.stderr)
+
     def test_changed_subset_cannot_resume(self):
         self.initialize([self.attempt(self.catalog[0])])
         with self.assertRaisesRegex(ValueError, 'identity changed'):

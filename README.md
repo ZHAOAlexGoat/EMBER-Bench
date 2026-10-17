@@ -89,10 +89,12 @@ Combine selections, for example `--levels L2 L3 --tasks P C`. L1 has P only. Use
 
 Results are in `runs/NAME/V1M0/custom/summary.json`, with predictions in `selected.jsonl`. Rerun the same command to resume completed questions without repeat API calls. Use a new `--out` directory after changing model, configuration, subset, or code. The default evaluation uses a 5 → 3 → 1 Hz retry ladder and a 512-token output budget; report any changes.
 
+The terminal prints overall and per-category accuracy, question counts, unanswered/pending counts, and result paths. `INCOMPLETE` means the run needs resuming; unanswered questions count as incorrect. Mock tests are explicitly labeled.
+
 ## Code and details
 
 `ember_bench/` provides the CLI; `evaluation/` contains inference, scoring, and model adapters; `docs/` contains the website. Evaluation media and annotations live on Hugging Face. Downloads pin a revision and verify file hashes.
 
-[Full guide](QUICKSTART.md) · [Data format and known limitations](docs/DATASET.md) · [Evaluation protocol](evaluation/README.md) · [Release checks](docs/RELEASE_20261017.md)
+[Full guide](QUICKSTART.md) · [Data format and known limitations](docs/DATASET.md) · [Evaluation protocol](evaluation/README.md) · [Release checks](docs/RECHECK_20261017.md)
 
 The unified runner does not exactly reproduce every model-specific setting in the paper. Keep run manifests when reporting scores. Code: [MIT](evaluation/LICENSE). Data: [CC BY-NC 4.0](dataset_card/LICENSE), with attribution and noncommercial use. Cite the [EMBER-Bench paper](https://arxiv.org/abs/2610.05013). Contact: zhaoboning0605@gmail.com.
