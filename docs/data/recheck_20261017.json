@@ -1,6 +1,6 @@
 {
   "status": "PASS",
-  "checked_at": "2026-10-17T10:32:13.307702+00:00",
+  "checked_at": "2026-10-17T10:56:12.780928+00:00",
   "hf_revision": "789111aff84058db4bb1d2a2441e8fbd8ea469bc",
   "questions": 699,
   "videos": 699,
@@ -100,8 +100,10 @@
   "hf_catalog_sha256": "39de2bd6b745b396d18413dc91fc2eaab19d7051dafb02500e9bdf83239753b4",
   "local_catalog_sha256": "39de2bd6b745b396d18413dc91fc2eaab19d7051dafb02500e9bdf83239753b4",
   "release_sha256": "5bdc723abcd33528d2196ec1b3d6ff5eeccd4ce74126c6c50bd9d3187e68ceb6",
-  "csv_sha256": "5f239625c43ec55fecbc91f2bc8f2634ae6c16aac35002f0438641b93d36712b",
+  "csv_sha256": "727f7f3a502362a379a642f394c0b67d6e0413c9778b469febc5803ef359e86d",
   "tested_evaluator_sha256": "87b7ce51872a966aa70b60ed33ed99c9fb1321987b8ef5ce8e73ee1202c5bdc7",
+  "tested_evaluator_lf_sha256": "02bd36420fa004053c4016a975978cc8caa705390cf880b4cb9df9676d35df50",
+  "evaluator_hash_note": "Raw hash records the tested Windows source; LF-normalized hash identifies the Git source across platforms.",
   "mock_artifact_sha256": {
     "manifest.json": "12e6243443afb8e59c336b076f08b744a6ab88c98cfc693e9cafe220971981d9",
     "attempts.jsonl": "760d35f0336509d6216c94512665a06e2d048070e8ad840a235e8765d03b2bfb",
